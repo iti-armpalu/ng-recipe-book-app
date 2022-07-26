@@ -15,13 +15,15 @@
           <input 
             type="number" 
             id="amount" 
-            class="form-control">
+            class="form-control"
+            #amountInput>
         </div>
         <div class="row">
           <div class="col-xs-12 mt-3">
             <button 
               class="btn btn-success me-2" 
-              type="submit">
+              type="submit"
+              (click)="onAddItem()">
                 Add
             </button>
             <button 
