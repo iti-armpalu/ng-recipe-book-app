@@ -10,5 +10,5 @@ Section 5 - Routing
 - Pass dynamic parameters to the links (settig up indexes) - done
 - Set up new component "edit-recipe" - done
 - Retrieve the current id, and therefore determine whether we are in editMode or not - done
-- Configure "new recipe" button so that user is navigated to the "New recipe" route.
-- Configure "edit recipe" button so that user is navigated to the "Edit recipe" route.
+- Configure "new recipe" button so that user is navigated to the "New recipe" route - done
+- Configure "edit recipe" button so that user is navigated to the "Edit recipe" route - done
