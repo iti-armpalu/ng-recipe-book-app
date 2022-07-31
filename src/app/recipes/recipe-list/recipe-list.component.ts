@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Recipe } from '../recipe.model';
 import { RecipeService } from '../recipe.service';
 
@@ -8,8 +9,9 @@ import { RecipeService } from '../recipe.service';
   templateUrl: './recipe-list.component.html',
   styleUrls: ['./recipe-list.component.css']
 })
-export class RecipeListComponent implements OnInit {
+export class RecipeListComponent implements OnInit, OnDestroy {
   recipes: Recipe[];
+  subscription: Subscription;
 
   constructor(
     private recipeService: RecipeService,
@@ -18,13 +20,23 @@ export class RecipeListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.subscription = this.recipeService.recipesChanged.
+      subscribe(
+        (recipes: Recipe[]) => {
+          this.recipes = recipes;
+        }
+      )
     this.recipes = this.recipeService.getRecipes(); 
   }
 
-    // On click navigate to the new route - for this use Router method "navigate" and pass keyword "new" as set in AppRouting
+  // On click navigate to the new route - for this use Router method "navigate" and pass keyword "new" as set in AppRouting
   // Also you need to inform the router about our current route, hence ActivatedRoute
   onNewRecipe() {
     this.router.navigate(['new'], {relativeTo: this.route})
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }
