@@ -1,24 +1,16 @@
-Section 10 - Dynamic Components
+Section 11 - Modules and Optimizations
 
-*ngIf method (preferred method)
+- Split the app into feature modules
+- Create recipes.module.ts inside recipes folder where you add recipes related declarations, imports and exports
+- Create recipes-routing.module.ts where you add recipes related routes
+- Create shopping-list.module.ts inside shopping-list folder where you add recipes related declarations, imports and exports
+- Add the shopping-list routes to the shopping-list.module.ts imports (not needed for a seperate routing file as we only have one route)
+- Create shared.module.ts inside shared folder where you add all shared declarations, imports and exports
+- Create core.module.ts inside app folder where you add all service relared providers
+- Create auth.module.ts inside auth folder where you add authentication related declarations, imports and exports
+- Implement lazy loading to the recipes router
+- Implement lazy loading to the shopping-list routes
+- Implement lazy loading to the authentication routes
+- Preload lazy-loaded code by importing { preloadingStrategy: PreloadAllModules } to the app-routing.module.ts
 
-- Create Alert Component that will pop up on Login/Signup error - done
-- Add the component to the auth.component.html via *ngIf method
-
-
-Programmatic (dynamic) method
-
-- Import ComponentFactoryResolver to the auh.component.ts and use it inside showErrorAlert function, and pass the type of your component - AlertComponent
-- Create helper directive placeholder.directive.ts that will point to a place in DOM where to put the AlertComponent - done
-- Add ng-template to the auth.component.html (this is a directive Angular ships with, which will not actually render anything to the DOM but still
-is accessible in the Angular templating language)
-- Add the appPlaceholder directive into the ng-template - done
-- Access that directive from auth.component.ts file wih @ViewChild - done
-- Access ViewContainer Reference of our host (PlaceholderDirective) - done
-- Clear anything that might have been rendered there before by simply calling clear on this view container reference - done
-- Use componentFactoryResolver to create a new alert component in that host ViewContainerRef - done
-- Use componentRef instance property to get access to the instances from AlertComponent (message annd close event) - done
-- Add ngOnDestroy method to cancel "close" subscription - done
-
-NB! Not working - I get an error message "ERROR TypeError: Cannot read properties of undefined (reading 'viewContainerRef')" and I cannot figure out the solution. Need to retry.
 
