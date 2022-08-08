@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
+import { Store } from '@ngrx/store';
+
 import { Ingredient } from '../shared/ingredient.model';
-import { ShoppingListService } from '../shopping-list/shopping-list.service';
 import { Recipe } from './recipe.model';
+import * as ShoppingListActions from '../shopping-list/store/shopping-list.actions';
+import * as fromShoppingList from '../shopping-list/store/shopping-list.reducer';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,39 +15,10 @@ export class RecipeService {
   recipesChanged = new Subject<Recipe[]>();
   private recipes: Recipe[] = [];
 
-  // Since we store our data in Firebase database, we don't need to store this data locally anymore, but still initialize recipes property
-
-  // private recipes: Recipe[] = [
-  //   new Recipe(
-  //     'A Test Recipe', 
-  //     'This is simply a test', 
-  //     'https://images.unsplash.com/photo-1524859330668-c357331384f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80',
-  //     [
-  //       new Ingredient ('Meat', 1),
-  //       new Ingredient ('French Fries', 20),
-  //     ]
-  //   ),
-  //   new Recipe(
-  //     'Another Recipe', 
-  //     'This is simply a test', 
-  //     'https://images.unsplash.com/photo-1524859330668-c357331384f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80',
-  //     [
-  //       new Ingredient ('Cabbage', 2),
-  //       new Ingredient ('Carrot', 3),
-  //     ]
-  //   ),
-  //   new Recipe(
-  //     'One More Recipe', 
-  //     'This is simply a test', 
-  //     'https://images.unsplash.com/photo-1524859330668-c357331384f5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=876&q=80',
-  //     [
-  //       new Ingredient ('Buns', 4),
-  //       new Ingredient ('Meat', 4),
-  //     ]
-  //   ),
-  // ];
-
-  constructor(private slService: ShoppingListService) { }
+  constructor(
+    // private store: Store<{shoppingList: { ingredients: Ingredient[] }}>,
+    private store: Store<fromShoppingList.AppState>,
+  ) { }
 
   setRecipes(recipes: Recipe[]) {
     this.recipes = recipes;
@@ -60,7 +35,8 @@ export class RecipeService {
   }
 
   addIngredientsToShoppingList(ingredients: Ingredient[]) {
-    this.slService.addIngredients(ingredients);
+    // this.slService.addIngredients(ingredients);
+    this.store.dispatch(new ShoppingListActions.AddIngredients(ingredients));
   }
 
   addRecipe(recipe: Recipe) {
