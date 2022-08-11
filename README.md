@@ -49,3 +49,14 @@ Auth NgRx/effects
 - Set up AutoLogin effect
 - Set up AutoLogout effect
 - Set up setLogoutTimeout and clearLogoutTimeout in auth.service.ts and clean the file
+
+@ngrx/store-devtools - Store Devtools provides developer tools and instrumentation for Store
+- Install Chrome extension
+- Install @ngrx/store-devtools via terminal
+- Set up the module in app.module.ts and configure
+
+@ngrx/router-store - bindings to connect the Angular Router with Store. During each router navigation cycle, multiple actions are dispatched that allow you to listen for changes in the router's state. You can then select data from the state of the router to provide additional information to your application
+- Install @ngrx/router-store via terminal
+- Set up the module in app.module.ts and configure
+
+
