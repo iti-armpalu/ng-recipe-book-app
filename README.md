@@ -1,6 +1,6 @@
 Section 13 - NgRx
 
-- NgRx Store provides reactive state management for Angular apps inspired by Redux.
+NgRx Store provides reactive state management for Angular apps inspired by Redux.
 
 Shopping-list NgRx/store
 - Create shopping-list.reducer.ts inside the shopping-list folder - Reducers in NgRx are responsible for handling transitions from one state to the next state in your application
@@ -19,7 +19,6 @@ Shopping-list NgRx/store
 - Add "StartEdit" and "StopEdit" actions, and dispatch necessary actions in shopping-edit.component.ts
 - Since we are managing everything with NgRx store, we can remove shopping-list.service.ts file and all imports
 
-
 Global NgRx/store
 - Add global "store" folder to the root of the app
 - Add app.reducer.ts file to the folder, this where all the component stores application state is set (collective set of slices of data)
@@ -37,3 +36,16 @@ Auth NgRx/store
 - Dispatch auth actions to the service and components
 - Remove the User subject from the service file
 - Update the components where "User" state inside service with the new "User" state inside auth.reducer.ts
+
+@ngrx/effects - In a service-based Angular application, components are responsible for interacting with external resources directly through services. Instead, effects provide a way to interact with those services and isolate them from the components. Effects are where you handle tasks such as fetching data, long-running tasks that produce multiple events, and other external interactions
+
+Auth NgRx/effects
+- Add auth.effects.ts inside auth "store" folder
+- Set up AuthLogin effect
+- Set up AuthLogout effect 
+- Set up AuthenticateSuccess effect
+- Set up AuthenticateFail effect
+- Set up AuthSignup effect
+- Set up AutoLogin effect
+- Set up AutoLogout effect
+- Set up setLogoutTimeout and clearLogoutTimeout in auth.service.ts and clean the file
