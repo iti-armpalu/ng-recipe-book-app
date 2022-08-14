@@ -45,13 +45,13 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
     const email = form.value.email;
     const password = form.value.password;
-    
+
     if (this.isLoginMode) {
       // authObs = this.authService.login(email, password);
-      this.store.dispatch(new AuthActions.LoginStart({email: email, password: password}));
+      this.store.dispatch(AuthActions.loginStart( {email: email, password: password} ));
     } else {
       // authObs = this.authService.signup(email, password);
-      this.store.dispatch(new AuthActions.SignupStart({email: email, password: password}));
+      this.store.dispatch(AuthActions.signupStart( {email: email, password: password} ));
     }
 
     // authObs.subscribe(
@@ -71,7 +71,7 @@ export class AuthComponent implements OnInit, OnDestroy {
   }
 
   onHandleError() {
-    this.store.dispatch(new AuthActions.ClearError());
+    this.store.dispatch(AuthActions.clearError());
   }
 
   ngOnDestroy(): void {

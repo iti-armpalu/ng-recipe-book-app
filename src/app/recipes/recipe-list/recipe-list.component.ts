@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { map, Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+
 import { Recipe } from '../recipe.model';
-import { RecipeService } from '../recipe.service';
+import * as fromApp from '../../store/app.reducer';
 
 @Component({
   selector: 'app-recipe-list',
@@ -14,19 +16,20 @@ export class RecipeListComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-    private recipeService: RecipeService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private store: Store<fromApp.AppState>
   ) { }
 
   ngOnInit(): void {
-    this.subscription = this.recipeService.recipesChanged.
-      subscribe(
+    this.subscription = this.store
+      .select('recipe')
+      .pipe(map(recipeState => recipeState.recipes))
+      .subscribe(
         (recipes: Recipe[]) => {
           this.recipes = recipes;
         }
       )
-    this.recipes = this.recipeService.getRecipes(); 
   }
 
   // On click navigate to the new route - for this use Router method "navigate" and pass keyword "new" as set in AppRouting

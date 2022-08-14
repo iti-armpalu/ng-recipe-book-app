@@ -1,55 +1,50 @@
-import { Component, OnInit } from '@angular/core';
-import { Form, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { RecipeService } from '../recipe.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Form, FormControl, UntypedFormArray, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { map, Subscription } from 'rxjs';
+
+import * as fromApp from '../../store/app.reducer';
+import * as RecipeActions from '../store/recipe.actions';
+
 
 @Component({
   selector: 'app-recipe-edit',
   templateUrl: './recipe-edit.component.html',
   styleUrls: ['./recipe-edit.component.css']
 })
+
+// When updating to Angular v14, a migration will automatically replace all the form entities in your application by their untyped versions: FormControl → UntypedFormControl (which is an alias for FormControl<any>)
+// More info: https://blog.ninja-squad.com/2022/04/21/strictly-typed-forms-angular/
+
 export class RecipeEditComponent implements OnInit {
   id: number;
   editMode = false;
   recipeForm: UntypedFormGroup;
+  private storeSub: Subscription;
 
-  constructor(private route: ActivatedRoute, 
-              private recipeService: RecipeService,
-              private router: Router) { }
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private store: Store<fromApp.AppState>
+    ) { }
 
   ngOnInit(): void {
-    this.route.params
-    .subscribe(params => {
+    this.route.params.subscribe((params: Params) => {
       this.id = +params['id'];
       this.editMode = params['id'] != null;
-      // console.log(this.editMode);
+      console.log(this.editMode);
       this.initForm();
     });
   }
 
-  // onSubmit() {
-  //   const newRecipe = new Recipe(
-  //     this.recipeForm.value['name'],
-  //     this.recipeForm.value['imagePath'],
-  //     this.recipeForm.value['description'],
-  //     this.recipeForm.value['ingredients']
-  //     );
-
-  //   if (this.editMode) {
-  //     this.recipeService.updateRecipe(this.id, newRecipe);
-  //   } else {
-  //     this.recipeService.addRecipe(newRecipe);
-  //   }
-  // }
-
-  // Since our value of the form has exactly the format of our recipe model and the same names like image path and so on and this is something we especially wanted to make sure and we focused on, you can skip this step of saving it in a new constant and just pass this recipe form value because the object stored here should have a valid format to fit one of our recipes.
-  // Compare above onSubmit() and below onSubmit()
-
   onSubmit() {
     if (this.editMode) {
-      this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      // this.recipeService.updateRecipe(this.id, this.recipeForm.value);
+      this.store.dispatch(RecipeActions.updateRecipe({index: this.id, recipe: this.recipeForm.value}));
     } else {
-      this.recipeService.addRecipe(this.recipeForm.value);
+      // this.recipeService.addRecipe(this.recipeForm.value);
+      this.store.dispatch(RecipeActions.addRecipe( {recipe: this.recipeForm.value} ));
     }
     this.onCancel();
   }
@@ -78,11 +73,11 @@ export class RecipeEditComponent implements OnInit {
     (<UntypedFormArray>this.recipeForm.get('ingredients')).removeAt(index);
   }
 
-  // Deleting all Items in a FormArray
-  // As of Angular 8+, there's a new way of clearing all items in a FormArray.
-  // (<FormArray>this.recipeForm.get('ingredients')).clear();
-  // The clear() method automatically loops through all registered FormControls (or FormGroups) in the FormArray and removes them.
-  // It's like manually creating a loop and calling removeAt() for every item.
+  ngOnDestroy(): void {
+    if (this.storeSub) {
+      this.storeSub.unsubscribe();
+    }
+  }
 
   private initForm() {
     let recipeName = '';
@@ -91,27 +86,37 @@ export class RecipeEditComponent implements OnInit {
     let recipeIngredients = new UntypedFormArray([]);
 
     if (this.editMode) {
-      const recipe = this.recipeService.getRecipe(this.id);
-      recipeName = recipe.name;
-      recipeImagePath = recipe.imagePath;
-      recipeDescription = recipe.description;
-      if (recipe['ingredients']) {
-        for (let ingredient of recipe.ingredients) {
-          recipeIngredients.push(
-            new UntypedFormGroup({
-              'name': new UntypedFormControl(ingredient.name, Validators.required),
-              'amount': new UntypedFormControl(ingredient.amount, [
-                Validators.required,
-                Validators.pattern(/^[1-9]+[0-9]*$/)
-              ]),
-            })
-          )
-        }
-      }
+      // const recipe = this.recipeService.getRecipe(this.id);
+      this.storeSub = this.store.select('recipe')
+        .pipe(
+          map(recipeState => {
+            return recipeState.recipes.find((recipe, index) => {
+              return index === this.id;
+            });
+          })
+        )
+        .subscribe(recipe => {
+          recipeName = recipe.name;
+          recipeImagePath = recipe.imagePath;
+          recipeDescription = recipe.description;
+          if (recipe['ingredients']) {
+            for (let ingredient of recipe.ingredients) {
+              recipeIngredients.push(
+                new UntypedFormGroup({
+                  'name': new UntypedFormControl(ingredient.name, Validators.required),
+                  'amount': new UntypedFormControl(ingredient.amount, [
+                    Validators.required,
+                    Validators.pattern(/^[1-9]+[0-9]*$/)
+                  ]),
+                })
+              )
+            }
+          }
+        })
     }
 
     this.recipeForm = new UntypedFormGroup({
-      'name': new UntypedFormControl(recipeName, Validators.required),
+      'name': new FormControl<String>(recipeName, Validators.required),
       'imagePath': new UntypedFormControl(recipeImagePath, Validators.required),
       'description': new UntypedFormControl(recipeDescription, Validators.required),
       'ingredients': recipeIngredients
