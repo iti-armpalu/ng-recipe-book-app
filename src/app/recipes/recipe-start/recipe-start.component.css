@@ -1,0 +1,12 @@
+.recipe-start h3 {
+  color: #00256d;
+  font-size: 40px;
+  font-family: 'Allura', cursive;
+}
+
+.recipe-start img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 15px;
+}

@@ -1,0 +1,8 @@
+.bg-container {
+  background-color: #DBEAFF;
+  min-height: 100vh;
+}
+
+.content {
+  min-height: calc(100vh - 112px);
+}

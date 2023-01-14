@@ -2,3 +2,10 @@ input.ng-invalid.ng-touched,
 textarea.ng-invalid.ng-touched  {
   border: 1px solid red;
 }
+
+.recipe-edit-image {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 15px;
+}

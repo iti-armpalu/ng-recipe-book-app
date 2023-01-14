@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 
 import * as fromApp from './store/app.reducer';
 import * as AuthActions from './auth/store/auth.actions';
+import * as RecipeActions from '../app/recipes/store/recipe.actions'
 
 @Component({
   selector: 'app-root',
@@ -20,5 +21,8 @@ export class AppComponent implements OnInit {
     if (isPlatformBrowser(this.platformId)) {
       this.store.dispatch(AuthActions.autoLogin());
     }
+
+    // Fetch saved recipes automatically after user is authenticated
+    this.store.dispatch(RecipeActions.fetchRecipes());
   }
 }

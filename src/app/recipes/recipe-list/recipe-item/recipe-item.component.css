@@ -1,0 +1,47 @@
+.recipe-list-image-container {
+  position: relative;
+  margin-bottom: 12px;
+}
+
+.recipe-list-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+
+.recipe-list-container {
+  position: absolute;
+  color: #fff;
+  top: 20%;
+  left: 20px;
+  padding: 8px 16px 8px 0;
+}
+
+.recipe-list-container p {
+  font-size: 14px;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.recipe-list-item h4 {
+  font-size: 20px;
+  color: #00256d;
+  font-weight: 600;
+}
+
+.recipe-list-item p {
+  font-size: 14px;
+  color: #00256d;
+  -webkit-line-clamp: 4;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.active > div {
+  border-radius: 15px;
+  background-color: #99e2de;
+}

@@ -30,7 +30,10 @@ export class RecipeListComponent implements OnInit, OnDestroy {
           this.recipes = recipes;
         }
       )
+
   }
+
+
 
   // On click navigate to the new route - for this use Router method "navigate" and pass keyword "new" as set in AppRouting
   // Also you need to inform the router about our current route, hence ActivatedRoute
