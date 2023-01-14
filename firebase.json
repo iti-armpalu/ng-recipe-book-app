@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/ng-the-basics-app",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
